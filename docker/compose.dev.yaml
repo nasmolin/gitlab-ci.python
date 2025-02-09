@@ -1,0 +1,20 @@
+
+networks:
+  bridge_dev:
+    driver: bridge
+
+services:
+  dev:
+    image: <>
+    ports:
+      - 8001:8001
+    networks:
+      - bridge_dev
+    volumes:
+      - /var/www/html/dev/static:/app/staticfiles
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}

@@ -1,0 +1,38 @@
+#
+# Managed by Gitlab-CI job
+# 
+
+server {
+    listen 80;
+    server_name subdomain.app.local;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    server_name subdomain.app.local;
+    listen 443 ssl;
+
+    ssl_certificate <>;
+    ssl_certificate_key <>;
+
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers 'ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384';
+    ssl_prefer_server_ciphers on;
+
+    access_log /var/log/nginx/production_access.log;
+    error_log /var/log/nginx/production_error.log;
+
+    location /static/ {
+        alias /var/www/html/prod/static/;
+        allow all;
+    }
+
+    location / {
+        proxy_pass http://127.0.0.1:8002;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
